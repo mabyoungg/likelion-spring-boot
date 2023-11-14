@@ -27,7 +27,7 @@ public class ArticleController {
         Article article = new Article(articles.size() + 1, title, body);
         articles.add(article);
 
-        ResultData result = new ResultData(
+        ResultData<Article> result = new ResultData<>(
                 "success-1",
                 "%d번 게시물이 작성되었습니다.".formatted(article.getId()),
                 article
@@ -35,7 +35,7 @@ public class ArticleController {
 
         String resultCode = result.getResultCode();
         String message = result.getMessage();
-        Article data = (Article) result.getData();
+        Article data = result.getData();
 
         return result;
     }
@@ -64,9 +64,9 @@ class Article {
 
 @AllArgsConstructor
 @Getter
-class ResultData {
+class ResultData<T> {
     private String resultCode;
     private String message;
-    private Object data;
+    private T data;
 }
 
