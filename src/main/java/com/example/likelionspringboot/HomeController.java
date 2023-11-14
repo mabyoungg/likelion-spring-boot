@@ -14,6 +14,8 @@ import java.util.Map;
 
 @Controller
 public class HomeController {
+    private int num = 0;
+
     @GetMapping("/")
     @ResponseBody
     String showMain() {
@@ -132,6 +134,14 @@ public class HomeController {
         model.addAttribute("value2","값2");
 
         return "calc12";
+    }
+
+    @GetMapping("/calc13")
+    @ResponseBody
+    int showCalc13() {
+        num++;
+
+        return num;
     }
 
 }
