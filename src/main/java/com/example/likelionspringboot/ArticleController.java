@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class ArticleController {
@@ -22,18 +20,22 @@ public class ArticleController {
 
     @GetMapping("/article/doWrite")
     @ResponseBody
-    Map<String, Object> doWrite(
+    ResultData doWrite(
             String title,
             String body
     ) {
         Article article = new Article(articles.size() + 1, title, body);
-
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("resultCode", "success-1");
-        result.put("msg", "%d번 게시물이 작성되었습니다.".formatted(article.getId()));
-        result.put("data", article);
-
         articles.add(article);
+
+        ResultData result = new ResultData(
+                "success-1",
+                "%d번 게시물이 작성되었습니다.".formatted(article.getId()),
+                article
+        );
+
+        String resultCode = result.getResultCode();
+        String message = result.getMessage();
+        Article data = (Article) result.getData();
 
         return result;
     }
@@ -59,3 +61,12 @@ class Article {
     private String title;
     private String body;
 }
+
+@AllArgsConstructor
+@Getter
+class ResultData {
+    private String resultCode;
+    private String message;
+    private Object data;
+}
+
