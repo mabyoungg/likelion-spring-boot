@@ -3,6 +3,7 @@ package com.example.likelionspringboot;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,7 +14,6 @@ import java.util.Map;
 
 @Controller
 public class HomeController {
-
     @GetMapping("/")
     @ResponseBody
     String showMain() {
@@ -118,8 +118,20 @@ public class HomeController {
             add(new Person(name + "3", age + 2));
         }};
 
-
         return perosnList;
+    }
+
+    @GetMapping("/calc11")
+    String showCalc11() {
+        return "calc11";
+    }
+
+    @GetMapping("/calc12")
+    String showCalc12(Model model) {
+        model.addAttribute("value1","값1");
+        model.addAttribute("value2","값2");
+
+        return "calc12";
     }
 
 }
