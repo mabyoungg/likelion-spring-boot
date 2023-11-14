@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +28,8 @@ public class ArticleController {
     ) {
         Article article = new Article(articles.size() + 1, title, body);
 
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("resultCode", "success-1");
         result.put("msg", "%d번 게시물이 작성되었습니다.".formatted(article.getId()));
         result.put("data", article);
 
