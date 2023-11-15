@@ -1,3 +1,38 @@
-<a href="/article/doWrite?title=제목&body=내용">
-    글쓰기
-</a>
+<div style="display: flex; flex-direction: column; gap:20px; max-width:500px;">
+    <input type="text" id="input-title" placeholder="제목">
+
+    <input type="text" id="input-body" placeholder="내용">
+
+    <a href="javascript:;" onclick="submitWriteForm();">
+        글쓰기
+    </a>
+</div>
+
+<script>
+    function submitWriteForm() {
+        const inputTitle = document.getElementById('input-title');
+        const inputBody = document.getElementById('input-body');
+
+        inputTitle.value = inputTitle.value.trim();
+        inputBody.value = inputBody.value.trim();
+
+        const title = inputTitle.value;
+        const body = inputBody.value;
+
+        if (title.length == 0) {
+            alert('제목을 입력해주세요.');
+            inputTitle.focus();
+
+            return;
+        }
+
+        if (body.length == 0) {
+            alert('내용을 입력해주세요.');
+            inputBody.focus();
+
+            return;
+        }
+
+        location.href = `/article/doWrite?title=${title}&body=${body}`;
+    }
+</script>
