@@ -1,7 +1,7 @@
-package com.example.likelionspringboot;
+package com.example.likelionspringboot.domain.article.article.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.example.likelionspringboot.domain.article.article.entity.Article;
+import com.example.likelionspringboot.global.resultData.ResultData;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -52,21 +52,5 @@ public class ArticleController {
         return articles;
     }
 
-}
-
-@AllArgsConstructor
-@Getter
-class Article {
-    private long id;
-    private String title;
-    private String body;
-}
-
-@AllArgsConstructor
-@Getter
-class ResultData<T> {
-    private String resultCode;
-    private String message;
-    private T data;
 }
 

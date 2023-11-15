@@ -1,4 +1,4 @@
-package com.example.likelionspringboot;
+package com.example.likelionspringboot.domain.home.home.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
