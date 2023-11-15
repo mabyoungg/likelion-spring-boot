@@ -3,12 +3,14 @@ package com.example.likelionspringboot.domain.article.article.controller;
 import com.example.likelionspringboot.domain.article.article.entity.Article;
 import com.example.likelionspringboot.domain.article.article.service.ArticleService;
 import com.example.likelionspringboot.global.resultData.ResultData;
+import com.example.likelionspringboot.global.rq.Rq;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArticleController {
     private final ArticleService articleService;
+    private final Rq rq;
 
     @GetMapping("/article/write")
     String showWrite() {
@@ -94,6 +97,21 @@ public class ArticleController {
     @ResponseBody
     String httpServletResponsePointer(HttpServletResponse resp) {
         return resp.toString();
+    }
+
+    @GetMapping("/article/rqPointer")
+    @ResponseBody
+    String rqPointer() {
+        return rq.toString();
+    }
+
+    @GetMapping("/article/rqTest")
+    String showRqTest(Model model) {
+        String rqToString = rq.toString();
+
+        model.addAttribute("rqToString", rqToString);
+
+        return "article/rqTest";
     }
 
 }
