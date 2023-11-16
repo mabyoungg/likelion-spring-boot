@@ -5,8 +5,8 @@
     <li><a href="/article/list">글 목록</a></li>
 </ul>
 
-<div style="color:red;" th:if="${param.msg} != null">
-    메세지 : [[${param.msg}]]
+<div style="color:red;" th:if="${param.message} != null">
+    메세지 : [[${param.message}]]
 </div>
 
 <ul th:if="${articles.size} > 0">
