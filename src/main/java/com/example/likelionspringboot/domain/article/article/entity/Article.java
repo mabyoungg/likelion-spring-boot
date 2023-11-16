@@ -2,10 +2,12 @@ package com.example.likelionspringboot.domain.article.article.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
+@Setter
 @ToString
 public class Article {
     private Long id;
@@ -17,7 +19,4 @@ public class Article {
         this.body = body;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
