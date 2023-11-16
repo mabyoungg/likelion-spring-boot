@@ -59,6 +59,15 @@ public class ArticleController {
         return "article/list";
     }
 
+    @GetMapping("/article/delete/{id}")
+    String delete(@PathVariable long id) {
+        articleService.delete(id);
+
+        String msg = "id %d, article deleted".formatted(id);
+
+        return "redirect:/article/list?msg=" + msg;
+    }
+
 //    @PostMapping("/article/write2")
 //    @SneakyThrows
 //    void write2(

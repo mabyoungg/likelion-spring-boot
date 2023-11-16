@@ -5,7 +5,6 @@ import com.example.likelionspringboot.domain.article.article.repository.ArticleR
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,4 +32,9 @@ public class ArticleService {
     public Optional<Article> findById(long id) {
         return articleRepository.findById(id);
     }
+
+    public void delete(long id) {
+        articleRepository.delete(id);
+    }
+
 }
