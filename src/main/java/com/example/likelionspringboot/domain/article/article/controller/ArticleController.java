@@ -27,12 +27,12 @@ public class ArticleController {
 
         model.addAttribute("articles", articles);
 
-        return "article/list";
+        return "article/article/list";
     }
 
     @GetMapping("/article/write")
     String showWrite() {
-        return "article/write";
+        return "article/article/write";
     }
 
     @PostMapping("/article/write")
@@ -51,7 +51,7 @@ public class ArticleController {
 
         model.addAttribute("article", article);
 
-        return "article/detail";
+        return "article/article/detail";
     }
 
     @GetMapping("/article/delete/{id}")
@@ -67,7 +67,7 @@ public class ArticleController {
 
         model.addAttribute("article", article);
 
-        return "article/modify";
+        return "article/article/modify";
     }
 
     @PostMapping("/article/modify/{id}")
