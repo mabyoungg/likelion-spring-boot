@@ -46,6 +46,15 @@ public class ArticleController {
         return result;
     }
 
+    @GetMapping("/article/list")
+    String showList(Model model) {
+        List<Article> articles = articleService.findAll();
+
+        model.addAttribute("articles", articles);
+
+        return "article/list";
+    }
+
 //    @PostMapping("/article/write2")
 //    @SneakyThrows
 //    void write2(
