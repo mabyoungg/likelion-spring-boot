@@ -7,7 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TEST</title>
 
+    <!-- jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link href="https://jhs512.github.io/toastr/toastr.css" rel="stylesheet">
+
     <link rel="stylesheet" href="/resource/global.css">
+    <script src="/resource/global.js"></script>
 </head>
 <body>
 
@@ -37,13 +45,13 @@
     </div>
 </div>
 
-<div class="alert alert-success" th:if="${param.message} != null">
-    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-    </svg>
-    <span th:text="${param.message}">Your purchase has been confirmed!</span>
-</div>
+<script>
+    const queryParams = getQueryParams();
+
+    if ( queryParams.message ) {
+        toastNotice(queryParams.message);
+    }
+</script>
 
 <th:block layout:fragment="content"></th:block>
 
