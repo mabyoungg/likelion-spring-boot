@@ -2,7 +2,6 @@ package com.example.likelionspringboot.domain.article.article.controller;
 
 import com.example.likelionspringboot.domain.article.article.entity.Article;
 import com.example.likelionspringboot.domain.article.article.service.ArticleService;
-import com.example.likelionspringboot.global.resultData.ResultData;
 import com.example.likelionspringboot.global.rq.Rq;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,21 +29,25 @@ public class ArticleController {
         return "article/write";
     }
 
+    @GetMapping("/article/detail/{id}")
+    String showDetail(Model model, @PathVariable long id) {
+        Article article = articleService.findById(id).get();
+
+        model.addAttribute("article", article);
+
+        return "article/detail";
+    }
+
     @PostMapping("/article/write")
-    @ResponseBody
-    ResultData write(
+    String write(
             @NotBlank String title,
             @NotBlank String body
     ) {
         Article article = articleService.write(title, body);
 
-        ResultData<Article> result = new ResultData<>(
-                "success-1",
-                "%d번 게시물이 작성되었습니다.".formatted(article.getId()),
-                    article
-        );
+        String message = "id %d, article created".formatted(article.getId());
 
-        return result;
+        return "redirect:/article/list?msg=" + message;
     }
 
     @GetMapping("/article/list")
