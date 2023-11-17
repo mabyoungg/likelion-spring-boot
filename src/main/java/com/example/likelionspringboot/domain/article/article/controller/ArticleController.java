@@ -2,7 +2,11 @@ package com.example.likelionspringboot.domain.article.article.controller;
 
 import com.example.likelionspringboot.domain.article.article.entity.Article;
 import com.example.likelionspringboot.domain.article.article.service.ArticleService;
+import com.example.likelionspringboot.domain.member.member.entity.Member;
+import com.example.likelionspringboot.domain.member.member.service.MemberService;
 import com.example.likelionspringboot.global.rq.Rq;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,17 +16,34 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 @Validated
 public class ArticleController {
     private final ArticleService articleService;
+    private final MemberService memberService;
     private final Rq rq;
 
     @GetMapping("/article/list")
-    String showList(Model model) {
+    String showList(Model model, HttpServletRequest request) {
+        long loginedMemberId = Optional.ofNullable(request.getCookies())
+                .stream()
+                .flatMap(Arrays::stream)
+                .filter(cookie -> cookie.getName().equals("loginedMemberId"))
+                .map(Cookie::getValue)
+                .mapToLong(Long::parseLong)
+                .findFirst()
+                .orElse(0);
+
+        if (loginedMemberId > 0) {
+            Member loginedMember = memberService.findById(loginedMemberId).get();
+            model.addAttribute("loginedMember", loginedMember);
+        }
+
         List<Article> articles = articleService.findAll();
 
         model.addAttribute("articles", articles);
