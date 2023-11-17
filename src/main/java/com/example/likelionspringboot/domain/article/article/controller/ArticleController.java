@@ -30,6 +30,7 @@ public class ArticleController {
 
     @GetMapping("/article/list")
     String showList(Model model, HttpServletRequest request) {
+        // cookie
         long loginedMemberId = Optional.ofNullable(request.getCookies())
                 .stream()
                 .flatMap(Arrays::stream)
@@ -42,6 +43,17 @@ public class ArticleController {
         if (loginedMemberId > 0) {
             Member loginedMember = memberService.findById(loginedMemberId).get();
             model.addAttribute("loginedMember", loginedMember);
+        }
+
+        // session
+        long fromSessionLoginedMemberId = 0;
+
+        if (request.getSession().getAttribute("loginedMemberId") != null)
+            fromSessionLoginedMemberId = (long) request.getSession().getAttribute("loginedMemberId");
+
+        if (fromSessionLoginedMemberId > 0) {
+            Member loginedMember = memberService.findById(fromSessionLoginedMemberId).get();
+            model.addAttribute("fromSessionLoginedMember", loginedMember);
         }
 
         List<Article> articles = articleService.findAll();
