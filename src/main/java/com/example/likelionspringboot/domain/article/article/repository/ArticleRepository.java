@@ -27,10 +27,6 @@ public class ArticleRepository {
         return article;
     }
 
-    public Article findLastArticle() {
-        return articles.getLast();
-    }
-
     public List<Article> findAll() {
         return articles;
     }
