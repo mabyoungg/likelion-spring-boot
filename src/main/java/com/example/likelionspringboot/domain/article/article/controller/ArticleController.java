@@ -2,10 +2,7 @@ package com.example.likelionspringboot.domain.article.article.controller;
 
 import com.example.likelionspringboot.domain.article.article.entity.Article;
 import com.example.likelionspringboot.domain.article.article.service.ArticleService;
-import com.example.likelionspringboot.domain.member.member.entity.Member;
-import com.example.likelionspringboot.domain.member.member.service.MemberService;
 import com.example.likelionspringboot.global.rq.Rq;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,29 +13,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 @Validated
 public class ArticleController {
     private final ArticleService articleService;
-    private final MemberService memberService;
     private final Rq rq;
 
     @GetMapping("/article/list")
-    String showList(Model model, HttpServletRequest request) {
-        // session
-        long loginedMemberId = Optional
-                .ofNullable(request.getSession().getAttribute("loginedMemberId"))
-                .map(id -> (long) id)
-                .orElse(0L);
-
-        if (loginedMemberId > 0) {
-            Member loginedMember = memberService.findById(loginedMemberId).get();
-            model.addAttribute("loginedMember", loginedMember);
-        }
-
+    String showList(Model model) {
         List<Article> articles = articleService.findAll();
 
         model.addAttribute("articles", articles);
@@ -48,15 +32,6 @@ public class ArticleController {
 
     @GetMapping("/article/write")
     String showWrite() {
-        HttpServletRequest request = rq.getRequest();
-        // session
-        long loginedMemberId = rq.getLoginedMemberId();
-
-        if (loginedMemberId > 0) {
-            Member loginedMember = rq.getLoginedMember();
-            request.setAttribute("loginedMember", loginedMember);
-        }
-
         return "article/article/write";
     }
 
@@ -71,19 +46,8 @@ public class ArticleController {
     }
 
     @GetMapping("/article/detail/{id}")
-    String showDetail(Model model, @PathVariable long id, HttpServletRequest request) {
-        // session
-        long loginedMemberId = Optional
-                .ofNullable(request.getSession().getAttribute("loginedMemberId"))
-                .map(memberId -> (long) memberId)
-                .orElse(0L);
-
-        if (loginedMemberId > 0) {
-            Member loginedMember = memberService.findById(loginedMemberId).get();
-            model.addAttribute("loginedMember", loginedMember);
-        }
-
-        Article article = articleService.findById(id).get();
+    String showDetail(Model model, @PathVariable long id) {
+       Article article = articleService.findById(id).get();
 
         model.addAttribute("article", article);
 

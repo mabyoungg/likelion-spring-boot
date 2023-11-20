@@ -19,6 +19,7 @@ public class Rq {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final MemberService memberService;
+    private Member member;
 
     public Rq(HttpServletRequest request, HttpServletResponse response, MemberService memberService) {
         this.request = request;
@@ -32,20 +33,29 @@ public class Rq {
         return "redirect:" + path + "?message=" + message;
     }
 
-    public long getLoginedMemberId() {
+    private long getMemberId() {
         return Optional
                 .ofNullable(request.getSession().getAttribute("loginedMemberId"))
                 .map(id -> (long) id)
                 .orElse(0L);
     }
 
-    public Member getLoginedMember() {
-        long loginedMemberId = getLoginedMemberId();
-
-        if (loginedMemberId == 0) {
+    public Member getMember() {
+        if (!isLogined()) {
             return null;
         }
 
-        return memberService.findById(loginedMemberId).get();
+        if (member == null)
+            member = memberService.findById(getMemberId()).get();
+
+        return member;
+    }
+
+    public boolean isLogined() {
+        return getMemberId() > 0;
+    }
+
+    public void setSessionAttribute(String name, Long value) {
+        request.getSession().setAttribute(name, value);
     }
 }

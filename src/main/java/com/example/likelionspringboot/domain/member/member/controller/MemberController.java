@@ -3,9 +3,6 @@ package com.example.likelionspringboot.domain.member.member.controller;
 import com.example.likelionspringboot.domain.member.member.entity.Member;
 import com.example.likelionspringboot.domain.member.member.service.MemberService;
 import com.example.likelionspringboot.global.rq.Rq;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -36,18 +33,14 @@ public class MemberController {
 
     @PostMapping("/member/login")
     String login(@NotBlank String username,
-                 @NotBlank String password,
-                 HttpServletResponse response,
-                 HttpServletRequest request) {
+                 @NotBlank String password) {
         Member member = memberService.findByUsername(username).get();
 
         if (!member.getPassword().equals(password)) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        // session
-        HttpSession session = request.getSession();
-        session.setAttribute("loginedMemberId", member.getId());
+        rq.setSessionAttribute("loginedMemberId", member.getId());
 
         return rq.redirect("/article/list", "로그인이 완료되었습니다.");
     }
