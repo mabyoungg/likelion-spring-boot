@@ -58,4 +58,8 @@ public class Rq {
     public void setSessionAttribute(String name, Long value) {
         request.getSession().setAttribute(name, value);
     }
+
+    public void removeSessionAttribute(String name) {
+        request.getSession().removeAttribute(name);
+    }
 }
