@@ -5,7 +5,6 @@ import com.example.likelionspringboot.domain.article.article.service.ArticleServ
 import com.example.likelionspringboot.domain.member.member.entity.Member;
 import com.example.likelionspringboot.domain.member.member.service.MemberService;
 import com.example.likelionspringboot.global.rq.Rq;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,26 +28,11 @@ public class ArticleController {
 
     @GetMapping("/article/list")
     String showList(Model model, HttpServletRequest request) {
-        // cookie
-        long loginedMemberId = Optional.ofNullable(request.getCookies())
-                .stream()
-                .flatMap(Arrays::stream)
-                .filter(cookie -> cookie.getName().equals("loginedMemberId"))
-                .map(Cookie::getValue)
-                .mapToLong(Long::parseLong)
-                .findFirst()
-                .orElse(0);
-
-        if (loginedMemberId > 0) {
-            Member loginedMember = memberService.findById(loginedMemberId).get();
-            model.addAttribute("loginedMember", loginedMember);
-        }
-
         // session
-        long fromSessionLoginedMemberId = 0;
-
-        if (request.getSession().getAttribute("loginedMemberId") != null)
-            fromSessionLoginedMemberId = (long) request.getSession().getAttribute("loginedMemberId");
+        long fromSessionLoginedMemberId = Optional
+                .ofNullable(request.getSession().getAttribute("loginedMemberId"))
+                .map(id -> (long) id)
+                .orElse(0L);
 
         if (fromSessionLoginedMemberId > 0) {
             Member loginedMember = memberService.findById(fromSessionLoginedMemberId).get();

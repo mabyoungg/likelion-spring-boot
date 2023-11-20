@@ -2,12 +2,6 @@
 
 <div layout:fragment="content" class="p-2">
 
-    <div th:if="${loginedMember} != null">
-        <span th:text="${loginedMember.username}"></span>님 환영합니다.(cookie)
-    </div>
-
-    <hr>
-
     <div th:if="${fromSessionLoginedMember} != null">
         <span th:text="${fromSessionLoginedMember.username}"></span>님 환영합니다.(session)
     </div>
