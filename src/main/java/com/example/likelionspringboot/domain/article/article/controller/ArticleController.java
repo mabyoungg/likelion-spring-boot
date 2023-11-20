@@ -50,13 +50,10 @@ public class ArticleController {
     String showWrite() {
         HttpServletRequest request = rq.getRequest();
         // session
-        long loginedMemberId = Optional
-                .ofNullable(request.getSession().getAttribute("loginedMemberId"))
-                .map(id -> (long) id)
-                .orElse(0L);
+        long loginedMemberId = rq.getLoginedMemberId();
 
         if (loginedMemberId > 0) {
-            Member loginedMember = memberService.findById(loginedMemberId).get();
+            Member loginedMember = rq.getLoginedMember();
             request.setAttribute("loginedMember", loginedMember);
         }
 
