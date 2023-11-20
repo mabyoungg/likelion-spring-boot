@@ -48,7 +48,7 @@ public class ArticleController {
             throw new RuntimeException("로그인 후 이용해주세요.");
         }
 
-        Article article = articleService.write(title, body);
+        Article article = articleService.write(rq.getMember(), title, body);
 
         return rq.redirect("/article/list", "%d번 게시물 생성되었습니다.".formatted(article.getId()));
     }

@@ -2,6 +2,7 @@ package com.example.likelionspringboot.domain.article.article.service;
 
 import com.example.likelionspringboot.domain.article.article.entity.Article;
 import com.example.likelionspringboot.domain.article.article.repository.ArticleRepository;
+import com.example.likelionspringboot.domain.member.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,8 @@ import java.util.Optional;
 public class ArticleService {
     private final ArticleRepository articleRepository;
 
-    public Article write(String title, String body) {
-        Article article = new Article(title, body);
+    public Article write(Member author, String title, String body) {
+        Article article = new Article(author, title, body);
 
         articleRepository.save(article);
 
