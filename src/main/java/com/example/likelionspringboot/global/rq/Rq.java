@@ -2,6 +2,7 @@ package com.example.likelionspringboot.global.rq;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -10,13 +11,14 @@ import java.nio.charset.StandardCharsets;
 
 @RequestScope
 @Component
+@Getter
 public class Rq {
-    private final HttpServletRequest req;
-    private final HttpServletResponse resp;
+    private final HttpServletRequest request;
+    private final HttpServletResponse response;
 
-    public Rq(HttpServletRequest req, HttpServletResponse resp) {
-        this.req = req;
-        this.resp = resp;
+    public Rq(HttpServletRequest request, HttpServletResponse response) {
+        this.request = request;
+        this.response = response;
     }
 
     public String redirect(String path, String message) {

@@ -29,14 +29,14 @@ public class ArticleController {
     @GetMapping("/article/list")
     String showList(Model model, HttpServletRequest request) {
         // session
-        long fromSessionLoginedMemberId = Optional
+        long loginedMemberId = Optional
                 .ofNullable(request.getSession().getAttribute("loginedMemberId"))
                 .map(id -> (long) id)
                 .orElse(0L);
 
-        if (fromSessionLoginedMemberId > 0) {
-            Member loginedMember = memberService.findById(fromSessionLoginedMemberId).get();
-            model.addAttribute("fromSessionLoginedMember", loginedMember);
+        if (loginedMemberId > 0) {
+            Member loginedMember = memberService.findById(loginedMemberId).get();
+            model.addAttribute("loginedMember", loginedMember);
         }
 
         List<Article> articles = articleService.findAll();
@@ -48,6 +48,18 @@ public class ArticleController {
 
     @GetMapping("/article/write")
     String showWrite() {
+        HttpServletRequest request = rq.getRequest();
+        // session
+        long loginedMemberId = Optional
+                .ofNullable(request.getSession().getAttribute("loginedMemberId"))
+                .map(id -> (long) id)
+                .orElse(0L);
+
+        if (loginedMemberId > 0) {
+            Member loginedMember = memberService.findById(loginedMemberId).get();
+            request.setAttribute("loginedMember", loginedMember);
+        }
+
         return "article/article/write";
     }
 
@@ -62,7 +74,18 @@ public class ArticleController {
     }
 
     @GetMapping("/article/detail/{id}")
-    String showDetail(Model model, @PathVariable long id) {
+    String showDetail(Model model, @PathVariable long id, HttpServletRequest request) {
+        // session
+        long loginedMemberId = Optional
+                .ofNullable(request.getSession().getAttribute("loginedMemberId"))
+                .map(memberId -> (long) memberId)
+                .orElse(0L);
+
+        if (loginedMemberId > 0) {
+            Member loginedMember = memberService.findById(loginedMemberId).get();
+            model.addAttribute("loginedMember", loginedMember);
+        }
+
         Article article = articleService.findById(id).get();
 
         model.addAttribute("article", article);
