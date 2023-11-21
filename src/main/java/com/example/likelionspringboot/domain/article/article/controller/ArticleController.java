@@ -32,10 +32,6 @@ public class ArticleController {
 
     @GetMapping("/article/write")
     String showWrite() {
-        if (!rq.isLogined()){
-            throw new RuntimeException("로그인 후 이용해주세요.");
-        }
-
         return "article/article/write";
     }
 
@@ -44,10 +40,6 @@ public class ArticleController {
             @NotBlank String title,
             @NotBlank String body
     ) {
-        if (!rq.isLogined()){
-            throw new RuntimeException("로그인 후 이용해주세요.");
-        }
-
         Article article = articleService.write(rq.getMember(), title, body);
 
         return rq.redirect("/article/list", "%d번 게시물 생성되었습니다.".formatted(article.getId()));
@@ -64,10 +56,6 @@ public class ArticleController {
 
     @GetMapping("/article/delete/{id}")
     String delete(@PathVariable long id) {
-        if (!rq.isLogined()){
-            throw new RuntimeException("로그인 후 이용해주세요.");
-        }
-
         articleService.delete(id);
 
         return rq.redirect("/article/list", "%d번 게시물 삭제되었습니다.".formatted(id));
@@ -75,10 +63,6 @@ public class ArticleController {
 
     @GetMapping("/article/modify/{id}")
     String showModify(Model model, @PathVariable long id) {
-        if (!rq.isLogined()){
-            throw new RuntimeException("로그인 후 이용해주세요.");
-        }
-
         Article article = articleService.findById(id).get();
 
         model.addAttribute("article", article);
@@ -88,10 +72,6 @@ public class ArticleController {
 
     @PostMapping("/article/modify/{id}")
     String modify(@PathVariable long id, @NotBlank String title, @NotBlank String body) {
-        if (!rq.isLogined()){
-            throw new RuntimeException("로그인 후 이용해주세요.");
-        }
-
         articleService.modify(id, title, body);
 
         return rq.redirect("/article/list", "%d번 게시물 수정되었습니다.".formatted(id));
