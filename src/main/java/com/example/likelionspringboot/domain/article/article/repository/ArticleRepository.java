@@ -3,6 +3,8 @@ package com.example.likelionspringboot.domain.article.article.repository;
 import com.example.likelionspringboot.domain.article.article.entity.Article;
 import com.example.likelionspringboot.domain.member.member.entity.Member;
 import com.example.likelionspringboot.domain.member.member.repository.MemberRepository;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -10,13 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class ArticleRepository {
     private final MemberRepository memberRepository;
     private final List<Article> articles = new ArrayList<>();
 
-    public ArticleRepository(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-
+    @PostConstruct
+    void init () {
         Member member1 = memberRepository.findById(1L).get();
         Member member2 = memberRepository.findById(2L).get();
 
