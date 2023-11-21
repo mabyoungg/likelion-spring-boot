@@ -41,6 +41,7 @@ public class MemberController {
         }
 
         rq.setSessionAttribute("loginedMemberId", member.getId());
+        rq.setSessionAttribute("authorities", member.getAuthorities());
 
         return rq.redirect("/article/list", "로그인이 완료되었습니다.");
     }

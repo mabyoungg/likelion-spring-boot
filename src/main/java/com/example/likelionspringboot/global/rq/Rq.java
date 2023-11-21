@@ -55,7 +55,7 @@ public class Rq {
         return getMemberId() > 0;
     }
 
-    public void setSessionAttribute(String name, Long value) {
+    public void setSessionAttribute(String name, Object value) {
         request.getSession().setAttribute(name, value);
     }
 
@@ -65,5 +65,9 @@ public class Rq {
 
     public boolean isAdmin() {
         return getMember().isAdmin();
+    }
+
+    public <T> T getSessionAttribute(String name) {
+        return (T) request.getSession().getAttribute(name);
     }
 }
