@@ -1,9 +1,6 @@
 package com.example.likelionspringboot.domain.article.article.repository;
 
 import com.example.likelionspringboot.domain.article.article.entity.Article;
-import com.example.likelionspringboot.domain.member.member.entity.Member;
-import com.example.likelionspringboot.domain.member.member.repository.MemberRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,18 +11,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class ArticleRepository {
-    private final MemberRepository memberRepository;
     private final List<Article> articles = new ArrayList<>();
-
-    @PostConstruct
-    void init () {
-        Member member1 = memberRepository.findById(1L).get();
-        Member member2 = memberRepository.findById(2L).get();
-
-        save(new Article(member1, "title1", "content1"));
-        save(new Article(member2, "title2", "content2"));
-        save(new Article(member2, "title3", "content3"));
-    }
 
     public Article save(Article article) {
         if (article.getId() == null){
