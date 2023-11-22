@@ -38,6 +38,10 @@ dependencies {
     // spring web
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    // spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
     // thymeleaf, thymeleaf-layout
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
