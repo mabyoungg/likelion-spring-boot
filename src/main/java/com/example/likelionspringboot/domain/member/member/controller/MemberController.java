@@ -3,8 +3,8 @@ package com.example.likelionspringboot.domain.member.member.controller;
 import com.example.likelionspringboot.domain.member.member.service.MemberService;
 import com.example.likelionspringboot.global.rq.Rq;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,24 +17,19 @@ public class MemberController {
     private final MemberService memberService;
     private final Rq rq;
 
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/member/login")
     String showLogin() {
         return "member/member/login";
     }
 
-    @Data
-    public static class LoginForm {
-        @NotBlank
-        private String username;
-        @NotBlank
-        private String password;
-    }
-
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/member/join")
     String showJoin() {
         return "member/member/join";
     }
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/member/join")
     String join(@NotBlank String username,
                 @NotBlank String password) {
