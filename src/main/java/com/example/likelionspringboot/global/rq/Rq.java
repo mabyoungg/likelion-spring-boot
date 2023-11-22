@@ -2,29 +2,38 @@ package com.example.likelionspringboot.global.rq;
 
 import com.example.likelionspringboot.domain.member.member.entity.Member;
 import com.example.likelionspringboot.domain.member.member.service.MemberService;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 @RequestScope
 @Component
 @Getter
+@RequiredArgsConstructor
 public class Rq {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final MemberService memberService;
+    private User user;
     private Member member;
 
-    public Rq(HttpServletRequest request, HttpServletResponse response, MemberService memberService) {
-        this.request = request;
-        this.response = response;
-        this.memberService = memberService;
+    @PostConstruct
+    public void init() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getPrincipal() instanceof User) {
+            this.user = (User) authentication.getPrincipal();
+        }
     }
 
     public String redirect(String path, String message) {
@@ -33,11 +42,8 @@ public class Rq {
         return "redirect:" + path + "?message=" + message;
     }
 
-    private long getMemberId() {
-        return Optional
-                .ofNullable(request.getSession().getAttribute("loginedMemberId"))
-                .map(id -> (long) id)
-                .orElse(0L);
+    private String getMemberUsername() {
+        return user.getUsername();
     }
 
     public Member getMember() {
@@ -46,13 +52,13 @@ public class Rq {
         }
 
         if (member == null)
-            member = memberService.findById(getMemberId()).get();
+            member = memberService.findByUsername(getMemberUsername()).get();
 
         return member;
     }
 
     public boolean isLogined() {
-        return getMemberId() > 0;
+        return user != null;
     }
 
     public void setSessionAttribute(String name, Object value) {
@@ -64,7 +70,9 @@ public class Rq {
     }
 
     public boolean isAdmin() {
-        return getMember().isAdmin();
+        return user.getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 
     public <T> T getSessionAttribute(String name) {
