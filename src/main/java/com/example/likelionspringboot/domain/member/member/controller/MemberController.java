@@ -1,6 +1,5 @@
 package com.example.likelionspringboot.domain.member.member.controller;
 
-import com.example.likelionspringboot.domain.member.member.entity.Member;
 import com.example.likelionspringboot.domain.member.member.service.MemberService;
 import com.example.likelionspringboot.global.rq.Rq;
 import jakarta.validation.constraints.NotBlank;
@@ -29,21 +28,6 @@ public class MemberController {
         private String username;
         @NotBlank
         private String password;
-    }
-
-    @PostMapping("/member/login")
-    String login(@NotBlank String username,
-                 @NotBlank String password) {
-        Member member = memberService.findByUsername(username).get();
-
-        if (!member.getPassword().equals(password)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-
-        rq.setSessionAttribute("loginedMemberId", member.getId());
-        rq.setSessionAttribute("authorities", member.getAuthorities());
-
-        return rq.redirect("/article/list", "로그인이 완료되었습니다.");
     }
 
     @GetMapping("/member/logout")
