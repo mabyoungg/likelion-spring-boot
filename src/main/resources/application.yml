@@ -8,3 +8,7 @@ spring:
     user:
       name: user
       password: 1234
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
