@@ -70,6 +70,10 @@ public class Rq {
     }
 
     public boolean isAdmin() {
+        if (!isLogined()) {
+            return false;
+        }
+
         return user.getAuthorities()
                 .stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
