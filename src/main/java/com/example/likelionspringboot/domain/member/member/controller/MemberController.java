@@ -9,28 +9,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
 @Validated
+@RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
     private final Rq rq;
 
     @PreAuthorize("isAnonymous()")
-    @GetMapping("/member/login")
+    @GetMapping("/login")
     String showLogin() {
         return "member/member/login";
     }
 
     @PreAuthorize("isAnonymous()")
-    @GetMapping("/member/join")
+    @GetMapping("/join")
     String showJoin() {
         return "member/member/join";
     }
 
     @PreAuthorize("isAnonymous()")
-    @PostMapping("/member/join")
+    @PostMapping("/join")
     String join(@NotBlank String username,
                 @NotBlank String password) {
         memberService.join(username, password);
