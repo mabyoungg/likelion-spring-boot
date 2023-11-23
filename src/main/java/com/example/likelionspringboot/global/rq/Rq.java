@@ -15,6 +15,7 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 @RequestScope
 @Component
@@ -38,6 +39,7 @@ public class Rq {
 
     public String redirect(String path, String message) {
         message = URLEncoder.encode(message, StandardCharsets.UTF_8);
+        message += ";ttl=" + (new Date().getTime() + 1000 * 5);
 
         return "redirect:" + path + "?message=" + message;
     }

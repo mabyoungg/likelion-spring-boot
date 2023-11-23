@@ -16,12 +16,24 @@ toastr.options = {
     hideMethod: "fadeOut"
 };
 
+function parseMsg(message) {
+    return message.split(";ttl=");
+}
+
 function toastWarning(message) {
-    toastr["warning"](message, "경고");
+    const [_message, ttl] = parseMsg(message);
+
+    if (ttl && parseInt(ttl) < new Date().getTime()) return;
+
+    toastr["warning"](_message, "경고");
 }
 
 function toastNotice(message) {
-    toastr["success"](message, "성공");
+    const [_messageg, ttl] = parseMsg(message);
+
+    if (ttl && parseInt(ttl) < new Date().getTime()) return;
+
+    toastr["success"](_messageg, "성공");
 }
 
 function getQueryParams() {
