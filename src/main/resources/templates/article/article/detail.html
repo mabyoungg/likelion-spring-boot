@@ -1,14 +1,14 @@
 <html layout:decorate="~{global/layout}">
 
 <head>
-    <title th:text="|글 내용 - ${article.id}. ${article.title}|"></title>
+    <title th:text="|게시글 내용 - ${article.id}. ${article.title}|"></title>
 </head>
 
 <body>
 <div layout:fragment="content">
 
     <h1 class="font-bold mb-2">
-        <i class="fa-regular fa-newspaper"></i> 글 내용
+        <i class="fa-regular fa-newspaper"></i> 게시글 내용
     </h1>
 
     <hr>
@@ -22,8 +22,8 @@
     <hr class="mt-2">
 
     <div class="mt-2 flex gap-2 justify-center">
-        <a th:if="${@articleService.canModify(@rq.member, article)}" class="btn-link" th:href="|/article/modify/${article.id}|">글 수정</a>
-        <a method="DELETE" th:if="${@articleService.canDelete(@rq.member, article)}" class="btn-link" onclick="return confirm('정말로 삭제하시겠습니까?');" th:href="|/article/delete/${article.id}|">글
+        <a th:if="${@articleService.canModify(@rq.member, article)}" class="btn-link" th:href="|/article/modify/${article.id}|">게시글 수정</a>
+        <a method="DELETE" th:if="${@articleService.canDelete(@rq.member, article)}" class="btn-link" onclick="return confirm('정말로 삭제하시겠습니까?');" th:href="|/article/delete/${article.id}|">게시글
             삭제</a>
     </div>
 
