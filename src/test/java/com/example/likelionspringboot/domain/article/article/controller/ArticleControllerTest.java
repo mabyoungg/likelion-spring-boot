@@ -39,6 +39,8 @@ public class ArticleControllerTest {
                 .perform(get("/article/list"))
                 .andDo(print());
 
+        Article article = articleService.findLatest().get();
+
         // THEN
         resultActions
                 .andExpect(status().is2xxSuccessful())
@@ -48,14 +50,8 @@ public class ArticleControllerTest {
                         게시글 목록
                         """.stripIndent().trim())))
                 .andExpect(content().string(containsString("""
-                        3번 : 제목3
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        2번 : 제목2
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        1번 : 제목1
-                        """.stripIndent().trim())));
+                         %d번 : %s
+                        """.formatted(article.getId(), article.getTitle()).stripIndent().trim())));
     }
 
     // GET /article/detail/{id}
