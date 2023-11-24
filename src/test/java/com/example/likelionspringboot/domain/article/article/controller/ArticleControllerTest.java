@@ -1,5 +1,7 @@
 package com.example.likelionspringboot.domain.article.article.controller;
 
+import com.example.likelionspringboot.domain.article.article.entity.Article;
+import com.example.likelionspringboot.domain.article.article.service.ArticleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ArticleControllerTest {
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private ArticleService articleService;
+
 
     // GET /article/list
     @Test
@@ -49,8 +54,32 @@ public class ArticleControllerTest {
                         """.stripIndent().trim())));
     }
 
-
     // GET /article/detail/{id}
+    @Test
+    @DisplayName("게시물 내용 페이지")
+    void t2() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(get("/article/detail/1"))
+                .andDo(print());
+
+        Article article = articleService.findById(1L).get();
+
+        // THEN
+        resultActions
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(handler().handlerType(ArticleController.class))
+                .andExpect(handler().methodName("showDetail"))
+                .andExpect(content().string(containsString("""
+                        게시글 내용
+                        """.stripIndent().trim())))
+                .andExpect(content().string(containsString("""
+                        <div class="badge badge-outline">1</div>
+                        """.stripIndent().trim())))
+                .andExpect(content().string(containsString(article.getTitle())))
+                .andExpect(content().string(containsString(article.getBody())));
+    }
+
     // GET /article/write
     // POST /article/write
     // GET /article/modify/{id}
