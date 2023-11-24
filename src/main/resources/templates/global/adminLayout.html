@@ -1,6 +1,10 @@
 <html layout:decorate="~{global/baseLayout}">
 <body>
 
+<head>
+    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">SIMPLE ADMIN</title>
+</head>
+
 <header layout:fragment="header" class="navbar bg-base-100">
     <div class="navbar-start">
         <div class="dropdown">
