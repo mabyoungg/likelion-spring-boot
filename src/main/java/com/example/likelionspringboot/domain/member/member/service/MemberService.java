@@ -45,4 +45,8 @@ public class MemberService {
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
+
+    public Optional<Member> findLatest() {
+        return memberRepository.findLatest();
+    }
 }

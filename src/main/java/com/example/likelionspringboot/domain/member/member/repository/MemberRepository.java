@@ -42,4 +42,10 @@ public class MemberRepository {
                 .filter(member -> member.getUsername().equals(username))
                 .findFirst();
     }
+
+    public Optional<Member> findLatest() {
+        return Optional.ofNullable(
+                members.isEmpty() ? null : members.getLast()
+        );
+    }
 }
