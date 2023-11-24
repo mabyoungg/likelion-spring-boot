@@ -12,8 +12,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -29,7 +32,7 @@ public class ArticleControllerTest {
 
     // GET /article/list
     @Test
-    @DisplayName("게시물 목록 페이지")
+    @DisplayName("게시글 목록 페이지")
     void t1() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
@@ -57,7 +60,7 @@ public class ArticleControllerTest {
 
     // GET /article/detail/{id}
     @Test
-    @DisplayName("게시물 내용 페이지")
+    @DisplayName("게시글 내용 페이지")
     void t2() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
@@ -83,7 +86,7 @@ public class ArticleControllerTest {
 
     // GET /article/write
     @Test
-    @DisplayName("게시물 작성 페이지를 보여준다")
+    @DisplayName("게시글 작성 페이지")
     @WithUserDetails("user1")
     void t3() throws Exception {
         // WHEN
@@ -108,6 +111,33 @@ public class ArticleControllerTest {
     }
 
     // POST /article/write
+    @Test
+    @DisplayName("게시글 작성")
+    @WithUserDetails("user1")
+    void t4() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(
+                        post("/article/write")
+                                .with(csrf())
+                                .param("title", "제목 new")
+                                .param("body", "내용 new")
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(handler().handlerType(ArticleController.class))
+                .andExpect(handler().methodName("write"))
+                .andExpect(redirectedUrlPattern("/article/list?message=**"));
+
+        Article article = articleService.findLatest().get();
+
+        assertThat(article.getTitle()).isEqualTo("제목 new");
+        assertThat(article.getBody()).isEqualTo("내용 new");
+    }
+
     // GET /article/modify/{id}
     // PUT /article/modify/{id}
     // DELETE /article/delete/{id}
