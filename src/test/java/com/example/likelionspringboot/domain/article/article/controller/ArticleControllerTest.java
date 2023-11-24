@@ -12,12 +12,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,9 +41,9 @@ public class ArticleControllerTest {
                 .perform(get("/article/list"))
                 .andDo(print());
 
+        // THEN
         Article article = articleService.findLatest().get();
 
-        // THEN
         resultActions
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(handler().handlerType(ArticleController.class))
@@ -64,9 +65,9 @@ public class ArticleControllerTest {
                 .perform(get("/article/detail/1"))
                 .andDo(print());
 
+        // THEN
         Article article = articleService.findById(1L).get();
 
-        // THEN
         resultActions
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(handler().handlerType(ArticleController.class))
@@ -137,7 +138,7 @@ public class ArticleControllerTest {
 
     // GET /article/modify/{id}
     @Test
-    @DisplayName("작성자가 아니라면 게시물 수정 페이지 접근 불가")
+    @DisplayName("작성자가 아니라면 게시글 수정 페이지 접근 불가")
     @WithUserDetails("user1")
     void t5() throws Exception {
         // WHEN
@@ -150,7 +151,7 @@ public class ArticleControllerTest {
 
     // GET /article/modify/{id}
     @Test
-    @DisplayName("게시물 수정 페이지")
+    @DisplayName("게시글 수정 페이지")
     @WithUserDetails("admin")
     void t6() throws Exception {
         // WHEN
@@ -158,9 +159,9 @@ public class ArticleControllerTest {
                 .perform(get("/article/modify/1"))
                 .andDo(print());
 
+        // THEN
         Article article = articleService.findById(1L).get();
 
-        // THEN
         resultActions
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(handler().handlerType(ArticleController.class))
@@ -181,5 +182,55 @@ public class ArticleControllerTest {
     }
 
     // PUT /article/modify/{id}
+    @Test
+    @DisplayName("게시글 수정")
+    @WithUserDetails("admin")
+    void t7() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(
+                        put("/article/modify/1")
+                                .with(csrf())
+                                .param("title", "제목 new")
+                                .param("body", "내용 new")
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(handler().handlerType(ArticleController.class))
+                .andExpect(handler().methodName("modify"))
+                .andExpect(redirectedUrlPattern("/article/list?message=**"));
+
+        Article article = articleService.findById(1L).get();
+
+        assertThat(article.getTitle()).isEqualTo("제목 new");
+        assertThat(article.getBody()).isEqualTo("내용 new");
+    }
+
     // DELETE /article/delete/{id}
+    @Test
+    @DisplayName("게시글 삭제")
+    @WithUserDetails("admin")
+    void t8() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(
+                        delete("/article/delete/1")
+                                .with(csrf())
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(handler().handlerType(ArticleController.class))
+                .andExpect(handler().methodName("delete"))
+                .andExpect(redirectedUrlPattern("/article/list?message=**"));
+
+        Optional<Article> optionalArticle = articleService.findById(1L);
+
+        assertThat(optionalArticle.isEmpty()).isEqualTo(true);
+    }
 }
