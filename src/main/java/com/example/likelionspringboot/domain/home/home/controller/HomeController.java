@@ -1,6 +1,8 @@
 package com.example.likelionspringboot.domain.home.home.controller;
 
+import com.example.likelionspringboot.global.rq.Rq;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -10,10 +12,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
+    private final Rq rq;
+
     @GetMapping("/")
-    public String goToArticleList() {
-        return "redirect:/article/list";
+    public String goToArticleList(String message) {
+        return rq.redirect("/article/list", message);
     }
 
     @GetMapping("/home/session")
