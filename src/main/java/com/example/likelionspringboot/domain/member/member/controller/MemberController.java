@@ -39,6 +39,6 @@ public class MemberController {
                 @NotBlank String password) {
         ResultData<Member> joinResult = memberService.join(username, password);
 
-        return rq.redirect("/member/login", joinResult.getMessage());
+        return rq.redirect("/member/login", joinResult);
     }
 }

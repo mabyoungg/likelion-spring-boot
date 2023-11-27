@@ -2,6 +2,7 @@ package com.example.likelionspringboot.global.rq;
 
 import com.example.likelionspringboot.domain.member.member.entity.Member;
 import com.example.likelionspringboot.domain.member.member.service.MemberService;
+import com.example.likelionspringboot.global.resultData.ResultData;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,6 +36,10 @@ public class Rq {
         if (authentication.getPrincipal() instanceof User) {
             this.user = (User) authentication.getPrincipal();
         }
+    }
+
+    public String redirect(String path, ResultData<?> resultData) {
+        return redirect(path, resultData.getMessage());
     }
 
     public String redirect(String path, String message) {
@@ -100,4 +105,5 @@ public class Rq {
 
         return "global/js";
     }
+
 }
