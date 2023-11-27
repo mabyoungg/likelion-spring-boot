@@ -95,6 +95,7 @@ public class Rq {
     }
 
     public String historyBack(String message) {
+        response.setStatus(400);
         request.setAttribute("message", message);
 
         return "global/js";
