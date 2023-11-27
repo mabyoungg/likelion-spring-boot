@@ -10,14 +10,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-//@Validated
+@Validated
 @RequestMapping("/article")
 public class ArticleController {
     private final ArticleService articleService;
@@ -106,18 +106,16 @@ public class ArticleController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write2")
-    String showWrite2(ArticleCreateForm articleCreateForm) {
+    String showWrite2() {
         return "article/article/write2";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write2")
-    String write2(@Valid ArticleCreateForm articleCreateForm, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "article/article/write2";
-        }
+    String write2(@Valid ArticleCreateForm articleCreateForm) {
+        Article article = articleService.write(rq.getMember(), articleCreateForm.getTitle(), articleCreateForm.getBody());
 
-        return "redirect:/";
+        return rq.redirect("/", "%d번 게시물 생성되었습니다.".formatted(article.getId()));
     }
 
 }
