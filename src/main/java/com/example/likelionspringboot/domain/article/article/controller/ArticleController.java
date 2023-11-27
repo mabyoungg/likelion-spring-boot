@@ -3,19 +3,21 @@ package com.example.likelionspringboot.domain.article.article.controller;
 import com.example.likelionspringboot.domain.article.article.entity.Article;
 import com.example.likelionspringboot.domain.article.article.service.ArticleService;
 import com.example.likelionspringboot.global.rq.Rq;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@Validated
+//@Validated
 @RequestMapping("/article")
 public class ArticleController {
     private final ArticleService articleService;
@@ -91,6 +93,31 @@ public class ArticleController {
         articleService.modify(article, title, body);
 
         return rq.redirect("/", "%d번 게시물 수정되었습니다.".formatted(id));
+    }
+
+    // write example
+    @Data
+    public static class ArticleCreateForm {
+        @NotBlank(message = "제목을 입력해주세요.")
+        private String title;
+        @NotBlank(message = "내용을 입력해주세요.")
+        private String body;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/write2")
+    String showWrite2(ArticleCreateForm articleCreateForm) {
+        return "article/article/write2";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/write2")
+    String write2(@Valid ArticleCreateForm articleCreateForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "article/article/write2";
+        }
+
+        return "redirect:/";
     }
 
 }
