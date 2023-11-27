@@ -90,4 +90,10 @@ public class Rq {
     public <T> T getSessionAttribute(String name) {
         return (T) request.getSession().getAttribute(name);
     }
+
+    public String historyBack(String message) {
+        request.setAttribute("message", message);
+
+        return "global/js";
+    }
 }
