@@ -2,6 +2,7 @@ package com.example.likelionspringboot.domain.member.member.service;
 
 import com.example.likelionspringboot.domain.member.member.entity.Member;
 import com.example.likelionspringboot.domain.member.member.repository.MemberRepository;
+import com.example.likelionspringboot.global.resultData.ResultData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Member join(String username, String password) {
+    public ResultData<Member> join(String username, String password) {
         if (findByUsername(username).isPresent()) {
-            return null;
+            return new ResultData<>("F-1", "이미 존재하는 회원입니다.");
         }
 
         password = passwordEncoder.encode(password);
@@ -25,7 +26,11 @@ public class MemberService {
 
         memberRepository.save(member);
 
-        return member;
+        return new ResultData<>(
+                "S-1",
+                "%s님 환영합니다.".formatted(member.getUsername()),
+                member
+        );
     }
 
     public List<Member> findAll() {

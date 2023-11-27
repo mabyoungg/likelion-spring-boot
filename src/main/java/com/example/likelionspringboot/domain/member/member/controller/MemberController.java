@@ -2,6 +2,7 @@ package com.example.likelionspringboot.domain.member.member.controller;
 
 import com.example.likelionspringboot.domain.member.member.entity.Member;
 import com.example.likelionspringboot.domain.member.member.service.MemberService;
+import com.example.likelionspringboot.global.resultData.ResultData;
 import com.example.likelionspringboot.global.rq.Rq;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +37,12 @@ public class MemberController {
     @PostMapping("/join")
     String join(@NotBlank String username,
                 @NotBlank String password) {
-        Member member = memberService.join(username, password);
+        ResultData<Member> joinResult = memberService.join(username, password);
 
-        if ( member == null ) {
-            return rq.historyBack("이미 존재하는 회원입니다.");
+        if (joinResult.isFail()) {
+            return rq.historyBack(joinResult.getMessage());
         }
 
-        return rq.redirect("/member/login", "회원가입이 완료되었습니다.");
+        return rq.redirect("/member/login", joinResult.getMessage());
     }
 }
