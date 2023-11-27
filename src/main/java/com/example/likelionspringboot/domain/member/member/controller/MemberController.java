@@ -37,17 +37,8 @@ public class MemberController {
     @PostMapping("/join")
     String join(@NotBlank String username,
                 @NotBlank String password) {
-        try {
-            ResultData<Member> joinResult = memberService.join(username, password);
+        ResultData<Member> joinResult = memberService.join(username, password);
 
-            if (joinResult.isFail()) {
-                return rq.historyBack(joinResult.getMessage());
-            }
-
-            return rq.redirect("/member/login", joinResult.getMessage());
-        } catch (RuntimeException e) {
-            return rq.historyBack(e.getMessage());
-        }
-
+        return rq.redirect("/member/login", joinResult.getMessage());
     }
 }
