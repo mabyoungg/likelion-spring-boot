@@ -99,11 +99,14 @@ public class Rq {
         return (T) request.getSession().getAttribute(name);
     }
 
+    public String historyBack(ResultData<?> resultData) {
+        return historyBack(resultData.getMessage());
+    }
+
     public String historyBack(String message) {
         response.setStatus(400);
         request.setAttribute("message", message);
 
         return "global/js";
     }
-
 }
