@@ -3,6 +3,6 @@
 </script>
 
 <script>
-    if (message) alert(message);
+    localStorage.setItem('historyBackMessage', message);
     history.back();
 </script>

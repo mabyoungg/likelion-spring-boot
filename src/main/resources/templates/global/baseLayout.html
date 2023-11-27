@@ -36,6 +36,15 @@
     if (queryParams.message) {
         toastNotice(queryParams.message);
     }
+
+    $(window).bind("pageshow", function (event) {
+        const historyBackMessage = localStorage.getItem('historyBackMessage');
+
+        if (historyBackMessage) {
+            toastWarning(historyBackMessage);
+            localStorage.removeItem('historyBackMessage');
+        }
+    });
 </script>
 
 <main class="p-4">
