@@ -109,4 +109,11 @@ public class Rq {
 
         return "global/js";
     }
+
+    public String redirectOrBack(String url, ResultData<?> resultData) {
+        if (resultData.isFail())
+            return historyBack(resultData);
+
+        return redirect(url, resultData);
+    }
 }

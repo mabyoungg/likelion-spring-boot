@@ -39,9 +39,6 @@ public class MemberController {
                 @NotBlank String password) {
         ResultData<Member> joinResult = memberService.join(username, password);
 
-        if (joinResult.isFail())
-            return rq.historyBack(joinResult);
-
-        return rq.redirect("/member/login", joinResult);
+        return rq.redirectOrBack("/member/login", joinResult);
     }
 }
