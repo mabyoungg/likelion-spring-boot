@@ -11,3 +11,8 @@ spring:
   threads:
     virtual:
       enabled: true
+  datasource:
+    url: jdbc:h2:./test_dev;MODE=MySQL
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
