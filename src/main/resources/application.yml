@@ -12,7 +12,15 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:h2:./test_dev;MODE=MySQL
+    url: jdbc:h2:./sb_dev;MODE=MySQL
     driverClassName: org.h2.Driver
     username: sa
     password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
