@@ -5,17 +5,24 @@ import com.example.likelionspringboot.domain.article.article.repository.ArticleR
 import com.example.likelionspringboot.domain.member.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ArticleService {
     private final ArticleRepository articleRepository;
 
+    @Transactional
     public Article write(Member author, String title, String body) {
-        Article article = new Article(author, title, body);
+        Article article = Article.builder()
+                .author(author)
+                .title(title)
+                .body(body)
+                .build();
 
         articleRepository.save(article);
 
@@ -30,10 +37,12 @@ public class ArticleService {
         return articleRepository.findById(id);
     }
 
+    @Transactional
     public void delete(Article article) {
         articleRepository.delete(article);
     }
 
+    @Transactional
     public void modify(Article article, String title, String body) {
         article.setTitle(title);
         article.setBody(body);
@@ -54,6 +63,6 @@ public class ArticleService {
     }
 
     public Optional<Article> findLatest() {
-        return articleRepository.findLatest();
+        return articleRepository.findFirstByOrderByIdDesc();
     }
 }

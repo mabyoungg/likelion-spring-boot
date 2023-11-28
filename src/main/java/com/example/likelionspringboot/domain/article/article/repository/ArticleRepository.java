@@ -1,45 +1,10 @@
 package com.example.likelionspringboot.domain.article.article.repository;
 
 import com.example.likelionspringboot.domain.article.article.entity.Article;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-@Repository
-@RequiredArgsConstructor
-public class ArticleRepository {
-    private final List<Article> articles = new ArrayList<>();
-
-    public Article save(Article article) {
-        if (article.getId() == null){
-            article.setId(articles.size() + 1L);
-        }
-
-        articles.add(article);
-
-        return article;
-    }
-
-    public List<Article> findAll() {
-        return articles;
-    }
-
-    public Optional<Article> findById(long id) {
-        return articles.stream()
-                .filter(article -> article.getId() == id)
-                .findFirst();
-    }
-
-    public void delete(Article article) {
-        articles.remove(article);
-    }
-
-    public Optional<Article> findLatest() {
-        return Optional.ofNullable(
-                articles.isEmpty() ? null : articles.getLast()
-        );
-    }
+public interface ArticleRepository extends JpaRepository<Article, Long> {
+    Optional<Article> findFirstByOrderByIdDesc();
 }
