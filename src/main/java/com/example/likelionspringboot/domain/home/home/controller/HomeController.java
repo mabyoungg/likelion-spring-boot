@@ -32,4 +32,10 @@ public class HomeController {
                         )
                 );
     }
+
+    @GetMapping("/home/test1")
+    @ResponseBody
+    public String showTest1() {
+        return Thread.currentThread().getName();
+    }
 }
