@@ -1,6 +1,7 @@
 package com.example.likelionspringboot.global.initData;
 
 import com.example.likelionspringboot.domain.article.article.service.ArticleService;
+import com.example.likelionspringboot.domain.base.system.service.SystemService;
 import com.example.likelionspringboot.domain.member.member.entity.Member;
 import com.example.likelionspringboot.domain.member.member.service.MemberService;
 import org.springframework.boot.ApplicationRunner;
@@ -13,10 +14,13 @@ import org.springframework.context.annotation.Profile;
 public class NotProd {
     @Bean
     public ApplicationRunner initNotProd(
+            SystemService systemService,
             MemberService memberService,
             ArticleService articleService
     ) {
         return args -> {
+            if (systemService.isSampleDataCreated()) return;
+
             Member memberAdmin = memberService.join("admin", "1234").getData();
             Member memberUser1 = memberService.join("user1", "1234").getData();
             Member memberUser2 = memberService.join("user2", "1234").getData();
