@@ -1,8 +1,12 @@
 <script th:inline="javascript">
     const message = /*[[${message}]]*/ null;
+    const exStr = /*[[${exStr}]]*/ null;
 </script>
 
 <script>
     localStorage.setItem('historyBackMessage', message);
+    if (exStr) {
+        sessionStorage.setItem('exStr__' + new Date(), exStr);
+    }
     history.back();
 </script>

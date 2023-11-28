@@ -38,5 +38,5 @@ out/
 
 
 ### Custom ###
-test_dev.mv.db
-test_dev.trace.db
+sb_dev.mv.db
+sb_dev.trace.db

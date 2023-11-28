@@ -3,6 +3,7 @@ package com.example.likelionspringboot.global.rq;
 import com.example.likelionspringboot.domain.member.member.entity.Member;
 import com.example.likelionspringboot.domain.member.member.service.MemberService;
 import com.example.likelionspringboot.global.resultData.ResultData;
+import com.example.likelionspringboot.standard.util.Ut;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -110,10 +111,20 @@ public class Rq {
         return "global/js";
     }
 
+    public String historyBack(Exception ex) {
+        String exStr = Ut.exception.toString(ex);
+        request.setAttribute("exStr", exStr);
+
+        System.err.println(exStr);
+
+        return historyBack(ex.getMessage());
+    }
+
     public String redirectOrBack(String url, ResultData<?> resultData) {
         if (resultData.isFail())
             return historyBack(resultData);
 
         return redirect(url, resultData);
     }
+
 }

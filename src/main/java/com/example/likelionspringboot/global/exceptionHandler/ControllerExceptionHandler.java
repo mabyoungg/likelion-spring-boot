@@ -13,6 +13,6 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public String handleException(RuntimeException ex) {
-        return rq.historyBack(ex.getMessage());
+        return rq.historyBack(ex);
     }
 }
