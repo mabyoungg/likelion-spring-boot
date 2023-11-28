@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -23,6 +24,7 @@ import java.util.Date;
 @Component
 @Getter
 @RequiredArgsConstructor
+@Slf4j
 public class Rq {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
@@ -115,7 +117,7 @@ public class Rq {
         String exStr = Ut.exception.toString(ex);
         request.setAttribute("exStr", exStr);
 
-        System.err.println(exStr);
+        log.debug(exStr);
 
         return historyBack(ex.getMessage());
     }
